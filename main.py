@@ -1,11 +1,10 @@
 from typing import List, Union
 from fastapi import Depends, FastAPI
-from db import db_connect
 from dotenv import dotenv_values
 from middleware import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
 
-engine, connection = db_connect()
+# engine, connection = db_connect()
 
 # Secret keys
 config = dotenv_values("./.env")
