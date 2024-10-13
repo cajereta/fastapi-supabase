@@ -1,5 +1,5 @@
 from typing import List, Union
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request, Response
 from dotenv import dotenv_values
 from middleware import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,15 +11,18 @@ config = dotenv_values("./.env")
 SECRET_KEY = config.get("SECRET_JWT")
 ALGORITHM = config.get("ALGORITHM")
 
+
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+@app.middleware("http")
+async def cors_handler(request: Request, call_next):
+    response: Response = await call_next(request)
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
 
 
 @app.get("/emojis", dependencies=[Depends(get_current_user)])
