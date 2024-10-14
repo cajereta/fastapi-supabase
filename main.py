@@ -1,12 +1,11 @@
 import logging
 from typing import List, Union
 from fastapi import Depends, FastAPI, HTTPException, Request
-from dotenv import dotenv_values
+import os
 import jwt
 from fastapi.middleware.cors import CORSMiddleware
 
-config = dotenv_values("./.env")
-SECRET_KEY = config.get("SECRET_JWT")
+SECRET_KEY = os.getenv("SECRET_JWT")
 
 app = FastAPI()
 
