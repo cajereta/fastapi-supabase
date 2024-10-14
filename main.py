@@ -18,6 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+print(SECRET_KEY)
+
 
 def format_token(token: str) -> str:
     token = token.replace("-", "+").replace("_", "/")
