@@ -4,19 +4,15 @@ from dotenv import dotenv_values
 from middleware import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
 
-# engine, connection = db_connect()
-
-# Secret keys
 config = dotenv_values("./.env")
 SECRET_KEY = config.get("SECRET_JWT")
 ALGORITHM = config.get("ALGORITHM")
-
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Make sure your frontend domain is allowed here
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +22,11 @@ app.add_middleware(
 @app.get("/emojis", dependencies=[Depends(get_current_user)])
 async def get_emojis(current_user: dict = Depends(get_current_user)) -> List[str]:
     return ["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣"]
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 
 @app.get("/")
