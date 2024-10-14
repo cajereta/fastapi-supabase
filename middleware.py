@@ -6,10 +6,16 @@ config = dotenv_values("./.env")
 SECRET_KEY = config.get("SECRET_JWT")
 
 
+def format_token(token: str) -> str:
+    token = token.replace("-", "+").replace("_", "/")
+    return token + "=" * (4 - len(token) % 4)
+
+
 def get_current_user(request: Request):
     auth_header = request.headers.get("Authorization")
     if auth_header:
         token = auth_header.split(" ")[1]
+        token = format_token(token)
         try:
             payload = jwt.decode(
                 token, SECRET_KEY, algorithms=["HS256"], audience="authenticated"
