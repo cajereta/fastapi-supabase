@@ -14,10 +14,11 @@ def format_token(token: str) -> str:
 
 def get_current_user(request: Request):
     auth_header = request.headers.get("Authorization")
-    print(token)
+    print(auth_header)
     if auth_header:
         token = auth_header.split(" ")[1]
         token = format_token(token)
+        print(token)
         try:
             payload = jwt.decode(
                 token, SECRET_KEY, algorithms=["HS256"], audience="authenticated"
